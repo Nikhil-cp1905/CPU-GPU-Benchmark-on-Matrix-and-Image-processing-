@@ -1,0 +1,24 @@
+CPU vs GPU Benchmark — concise analysis
+
+Files used:
+
+ - matrix_results.csv
+ - image_results.csv
+ - gpu_log.csv
+
+Key findings (answer depends on your CSVs):
+
+- Small matrices/images: the CPU may be faster due to host<->device overhead and BLAS multi-threading on CPU.
+
+- Medium-to-large sizes: GPU typically outperforms because of massive parallelism; speedup grows with problem size.
+
+- Transfer vs compute: if transfer bars are large relative to compute, consider batching or pinned memory and streams.
+
+- GPU utilization: high sustained utilization indicates compute-bound workload (GPU advantage). Low utilization + long runtime suggests I/O or small kernels.
+
+
+Recommended next steps:
+
+ - Report median and 95% CI for each measurement (we used medians here)
+ - Show both compute-only (device-resident) and end-to-end times (including transfers)
+ - Try batched GEMM or asynchronous streams to hide transfer time for real workloads.
